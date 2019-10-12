@@ -17,6 +17,7 @@
     and `ConstraintsB`.
   - Fix failure to derive `TraversableB` and `ConstraintsB` when using a type
     parameter not under the functor argument.
+  - Add `Data.Functor.Indexed`
 
 ## 1.1.3.0
   - `Wear` will raise a `TypeError` instead of getting
