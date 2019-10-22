@@ -25,12 +25,13 @@ module TestBiBarbies
 
   , ParX(..)
   , HKB(..)
+
+  , NestedB(..)
   )
 
 where
 
-import qualified Barbies
-import Data.Functor.Indexed
+import Barbies
 
 import Data.Typeable
 import GHC.Generics
@@ -310,3 +311,29 @@ instance FunctorI HKB
 instance ApplicativeI HKB
 instance TraversableI HKB
 instance ConstraintsI HKB
+
+
+
+-----------------------------------------------------
+-- Actual bi-barbies
+-----------------------------------------------------
+
+data NestedB f g
+  = NestedB
+      { nb_1 :: g Int
+      , nb_2 :: f (g Bool)
+      }
+  deriving (Generic, Typeable)
+
+instance FunctorI NestedB
+instance TraversableI NestedB
+instance FunctorB (NestedB f)
+
+
+deriving instance (Show (f (g Bool)), Show (g Int)) => Show (NestedB f g)
+deriving instance (Eq (f (g Bool)), Eq (g Int)) => Eq (NestedB f g)
+
+
+instance (Arbitrary (f (g Bool)), Arbitrary (g Int)) => Arbitrary (NestedB f g) where
+  arbitrary
+    = NestedB <$> arbitrary <*> arbitrary

@@ -22,6 +22,7 @@ module TestBarbies
   , NestedF(..)
 
   , ParX(..)
+  , ParF(..)
   , HKB(..)
   )
 
@@ -289,6 +290,26 @@ deriving instance (Eq a, Eq (f a)) => Eq (ParX a f)
 instance (Arbitrary a, Arbitrary (f a)) => Arbitrary (ParX a f) where
   arbitrary
     = ParX <$> arbitrary <*> arbitrary
+
+
+data ParF g f
+  = ParF
+      { pf1 :: g Int
+      , pf2 :: f Int
+      }
+  deriving (Generic, Typeable)
+
+instance FunctorB (ParF g)
+instance TraversableB (ParF g)
+instance Monoid (g Int) => ApplicativeB (ParF g)
+instance ConstraintsB (ParF g)
+
+deriving instance (Show (g Int), Show (f Int)) => Show (ParF g f)
+deriving instance (Eq (g Int), Eq (f Int)) => Eq (ParF g f)
+
+instance (Arbitrary (g Int), Arbitrary (f Int)) => Arbitrary (ParF g f) where
+  arbitrary
+    = ParF <$> arbitrary <*> arbitrary
 
 -----------------------------------------------------
 -- Higher-kinded barbies
